@@ -9,7 +9,7 @@ const bodyParser = require('body-parser')
 require('dotenv').config()
 
 const app = express()
-const PORT = parseInt(<string>process.env.PORT, 10) || 5001
+const PORT = parseInt(<string>process.env.PORT, 10) || 5000
 
 connectDatabase()
 app.use(express.json())
