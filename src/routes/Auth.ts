@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import AuthCallback from '../controller/authController'
+import AuthCallback from '../controller/AuthController'
 const AuthRouter = Router()
 
 AuthRouter.post('/login', AuthCallback.login)

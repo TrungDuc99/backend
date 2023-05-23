@@ -12,7 +12,7 @@ var routes_1 = require("./routes");
 var bodyParser = require('body-parser');
 require('dotenv').config();
 var app = (0, express_1.default)();
-var PORT = parseInt(process.env.PORT, 10) || 5001;
+var PORT = parseInt(process.env.PORT, 10) || 9888;
 (0, connectDatabase_1.default)();
 app.use(express_1.default.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,6 +24,7 @@ app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use('/api/user', routes_1.UserRouter);
 app.use('/api/product', routes_1.ProductRouter);
 app.use('/api/category', routes_1.CategoryRouter);
+app.use('/api', routes_1.AuthRouter);
 app.listen(PORT, function () {
     console.log('Server is running at port:', PORT);
 });

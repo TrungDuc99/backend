@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { UserModel } from '../models'
 const jwt = require('jsonwebtoken')
-
 require('dotenv').config()
 const bcrypt = require('bcrypt')
 const secretKey: any = process.env.TOKEN_SECRET_KEY
@@ -9,19 +8,24 @@ const secretKey: any = process.env.TOKEN_SECRET_KEY
 export default class AuthCallback {
   static async login(req: Request, res: Response) {
     try {
-      console.log('============asdasd========================')
-
-      console.log('====================================')
       const { email, password } = req.body
-
-      const user = await UserModel.findOne({ email }) // find the user by email
+      console.log('============asdasd========================')
+      console.log('====================================')
+      console.log(email, password)
+      console.log('====================================')
+      console.log('====================================')
+      // const userID = req.params.id
+      // const payload = await UserModel.findOne({ _id: userID })
+      const user = await UserModel.findOne({ email: email }) // find the user by email
       if (!user) {
-        return res.status(401).send({ message: 'Invalid username or password' }) // return the error message when the user does not exist
+        return res
+          .status(401)
+          .send({ message: 'Invalid username or password asdasd' }) // return the error message when the user does not exist
       }
       // Kiểm tra password
       const isPasswordValid = await bcrypt.compare(password, user.password)
       if (!isPasswordValid) {
-        return res.status(401).send({ message: 'Invalid username or password' })
+        return res.status(401).send({ message: 'Invalid username1111 or password' })
       }
       // Tạo JWT token và trả về cho client
       const token = jwt.sign({ id: user._id }, 'secretKey')
