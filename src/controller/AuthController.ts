@@ -9,14 +9,8 @@ export default class AuthCallback {
   static async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body
-      console.log('============asdasd========================')
-      console.log('====================================')
-      console.log(email, password)
-      console.log('====================================')
-      console.log('====================================')
-      // const userID = req.params.id
-      // const payload = await UserModel.findOne({ _id: userID })
       const user = await UserModel.findOne({ email: email }) // find the user by email
+
       if (!user) {
         return res
           .status(401)
@@ -24,11 +18,14 @@ export default class AuthCallback {
       }
       // Kiểm tra password
       const isPasswordValid = await bcrypt.compare(password, user.password)
+
       if (!isPasswordValid) {
-        return res.status(401).send({ message: 'Invalid username1111 or password' })
+        return res
+          .status(401)
+          .send({ message: 'Invalid username111qeqw1 or password' })
       }
       // Tạo JWT token và trả về cho client
-      const token = jwt.sign({ id: user._id }, 'secretKey')
+      const token = jwt.sign({ id: user._id }, secretKey)
       return res.status(200).send({ token })
     } catch (err) {
       res.status(500).json({ error: err })
@@ -41,7 +38,7 @@ export default class AuthCallback {
       const payload = await UserModel.create({
         email,
         name,
-        hashedPassword,
+        password: hashedPassword,
         phone,
         address,
       })
@@ -66,14 +63,14 @@ export default class AuthCallback {
       res.status(500).json({ error: err })
     }
   }
-  static async me(req: Request, res: Response) {
-    const userID = req
-    const payload = await UserModel.findOne({ _id: userID })
-    if (!payload) {
-      return res.status(404).send({ message: 'User not found' })
-    }
-    return res.send(req)
-  }
+  // static async me(req: Request, res: Response) {
+  //   const userID = req
+  //   const payload = await UserModel.findOne({ _id: userID })
+  //   if (!payload) {
+  //     return res.status(404).send({ message: 'User not found' })
+  //   }
+  //   return res.send({ error: 'asdasd' })
+  // }
 }
 
 // https://docs.mongodb.com/manual/crud/

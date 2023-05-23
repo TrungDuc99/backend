@@ -51,22 +51,25 @@ var AuthCallback = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         _b.trys.push([0, 3, , 4]);
-                        console.log('============asdasd========================');
-                        console.log('====================================');
                         _a = req.body, email = _a.email, password = _a.password;
                         return [4 /*yield*/, models_1.UserModel.findOne({ email: email })]; // find the user by email
                     case 1:
                         user = _b.sent() // find the user by email
                         ;
                         if (!user) {
-                            return [2 /*return*/, res.status(401).send({ message: 'Invalid username or password' })]; // return the error message when the user does not exist
+                            return [2 /*return*/, res
+                                    .status(401)
+                                    .send({ message: 'Invalid username or password asdasd' })]; // return the error message when the user does not exist
                         }
                         return [4 /*yield*/, bcrypt.compare(password, user.password)];
                     case 2:
                         isPasswordValid = _b.sent();
                         if (!isPasswordValid) {
-                            return [2 /*return*/, res.status(401).send({ message: 'Invalid username or password' })];
+                            return [2 /*return*/, res.status(401).send({ message: 'Invalid username1111 or password' })];
                         }
+                        console.log('====================================');
+                        console.log(isPasswordValid);
+                        console.log('====================================');
                         token = jwt.sign({ id: user._id }, 'secretKey');
                         return [2 /*return*/, res.status(200).send({ token: token })];
                     case 3:
