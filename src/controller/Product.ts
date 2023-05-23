@@ -7,8 +7,6 @@ const secretKey: any = process.env.TOKEN_SECRET_KEY
 export default class UserCallback {
   static async createGraphQL(params: any) {
     try {
-      console.log(params)
-
       const payload = await ProductModel.create(params)
       return payload
     } catch (err) {
@@ -61,10 +59,9 @@ export default class UserCallback {
   }
   static async getOnlyProduct(req: Request, res: Response) {
     try {
-      console.log(req.params)
       const productID = req.params.id
       const payload = await ProductModel.findOne({ _id: productID })
-      return res.json({ success: true, data: { ...payload, adsasd: 'qweqwe' } })
+      return res.json({ success: true, data: { payload } })
     } catch (err) {
       res.status(500).json({ error: err })
     }
