@@ -35,9 +35,6 @@ export default class UserCallback {
       const { _id } = req.params
       const { name, description, category, image, id } = req.body
 
-      console.log('====================================')
-      console.log(_id, name, id)
-
       const payload = await CategoryModel.findOneAndUpdate(
         { _id: _id },
         { name, description, category, image, id }

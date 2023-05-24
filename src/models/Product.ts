@@ -10,8 +10,8 @@ export interface ProductDoc extends Document {
   image: string
   isActive: boolean
   price: string
-  create_date: string
-  category: string
+  createDate: string
+  categoryId: string
 }
 
 const ProductSchema = new Schema<ProductDoc>({
@@ -20,8 +20,8 @@ const ProductSchema = new Schema<ProductDoc>({
   image: defaultType.string,
   isActive: defaultType.boolean,
   price: defaultType.string,
-  category: defaultType.string,
-  create_date: defaultType.string,
+  categoryId: defaultType.string,
+  createDate: defaultType.string,
 })
 
 export default ProductSchema

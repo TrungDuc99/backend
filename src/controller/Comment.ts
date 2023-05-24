@@ -4,51 +4,7 @@ require('dotenv').config()
 
 const secretKey: any = process.env.TOKEN_SECRET_KEY
 
-export default class ProductCallback {
-  static async createGraphQL(params: any) {
-    try {
-      const payload = await ProductModel.create(params)
-      return payload
-    } catch (err) {
-      console.log(err)
-      return false
-    }
-  }
-
-  static async updateGraphQL(params: any) {
-    try {
-      console.log(params)
-      const { id } = params
-      const payload = await ProductModel.findOneAndUpdate({ _id: id }, params)
-
-      return payload
-    } catch (err) {
-      console.log(err)
-      return false
-    }
-  }
-
-  static async getGraphQL(params: any) {
-    try {
-      const { id } = params
-      const payload = await ProductModel.findOne({ _id: id })
-
-      return payload
-    } catch (err) {
-      return false
-    }
-  }
-  static async getAllProductGraphQL(params: any, res: Response) {
-    try {
-      const payload = await ProductModel.find()
-      console.log(payload)
-
-      return res.json({ success: true, data: payload })
-    } catch (err) {
-      return false
-    }
-  }
-
+export default class CommentCallback {
   static async get(req: Request, res: Response) {
     try {
       const payload = await ProductModel.find()
@@ -59,8 +15,8 @@ export default class ProductCallback {
   }
   static async getOne(req: Request, res: Response) {
     try {
-      const productID = req.params.id
-      const payload = await ProductModel.findOne({ _id: productID })
+      const { id } = req.params
+      const payload = await ProductModel.findOne({ _id: id })
       return res.json({ success: true, data: { payload } })
     } catch (err) {
       res.status(500).json({ error: err })
@@ -68,15 +24,21 @@ export default class ProductCallback {
   }
   static async create(req: Request, res: Response) {
     try {
-      const { name, description, image, show, price, category, isActive } = req.body
+      const {
+        comment,
+        userId,
+        postId,
+        countLikes,
+        replyForCommentId,
+        countDisLikes,
+        countShare,
+      } = req.body
       const payload = await ProductModel.create({
-        name,
-        description,
-        image,
-        show,
-        price,
-        category,
-        isActive,
+        userId,
+        countLikes: 0,
+        replyForCommentId,
+        countDisLikes: 0,
+        countShare: 0,
       })
       return res.json({ success: true, data: payload })
     } catch (err) {

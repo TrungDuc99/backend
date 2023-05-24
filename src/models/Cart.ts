@@ -8,7 +8,7 @@ export interface CartDoc extends Document {
   quantity: string
   status: string
   ammount: string
-  order_date: string
+  orderDate: string
 }
 
 const CartSchema = new Schema<CartDoc>({})

@@ -3,7 +3,14 @@ import connectDatabase from './utils/connectDatabase'
 import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
-import { AuthRouter, CategoryRouter, ProductRouter, UserRouter } from './routes'
+import {
+  AuthRouter,
+  CategoryRouter,
+  CommentRouter,
+  PostRouter,
+  ProductRouter,
+  UserRouter,
+} from './routes'
 const bodyParser = require('body-parser')
 
 require('dotenv').config()
@@ -23,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/api/user', UserRouter)
 app.use('/api/product', ProductRouter)
 app.use('/api/category', CategoryRouter)
+app.use('/api/post', PostRouter)
+app.use('/api/comment', CommentRouter)
 app.use('/api', AuthRouter)
 app.listen(PORT, () => {
   console.log('Server is running at port:', PORT)
