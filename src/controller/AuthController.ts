@@ -12,20 +12,16 @@ export default class AuthCallback {
       const user = await UserModel.findOne({ email: email }) // find the user by email
 
       if (!user) {
-        return res
-          .status(401)
-          .send({ message: 'Invalid username or password asdasd' }) // return the error message when the user does not exist
+        return res.status(401).send({ message: 'Invalid username or password' }) // return the error message when the user does not exist
       }
       // Kiểm tra password
       const isPasswordValid = await bcrypt.compare(password, user.password)
 
       if (!isPasswordValid) {
-        return res
-          .status(401)
-          .send({ message: 'Invalid username111qeqw1 or password' })
+        return res.status(401).send({ message: 'Invalid username or password' })
       }
       // Tạo JWT token và trả về cho client
-      const token = jwt.sign({ id: user._id }, secretKey)
+      const token = jwt.sign({ user }, secretKey)
       return res.status(200).send({ token })
     } catch (err) {
       res.status(500).json({ error: err })
@@ -63,14 +59,14 @@ export default class AuthCallback {
       res.status(500).json({ error: err })
     }
   }
-  // static async me(req: Request, res: Response) {
-  //   const userID = req
-  //   const payload = await UserModel.findOne({ _id: userID })
-  //   if (!payload) {
-  //     return res.status(404).send({ message: 'User not found' })
-  //   }
-  //   return res.send({ error: 'asdasd' })
-  // }
+  static async me(req: any, res: Response) {
+    const userID = req.user.user._id // Lấy id của user.
+    const payload = await UserModel.findOne({ _id: userID })
+    if (!payload) {
+      return res.status(404).send({ message: 'User not found' })
+    }
+    return res.send(payload) // Trả về thông tin user.
+  }
 }
 
 // https://docs.mongodb.com/manual/crud/

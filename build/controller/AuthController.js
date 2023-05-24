@@ -57,20 +57,15 @@ var AuthCallback = /** @class */ (function () {
                         user = _b.sent() // find the user by email
                         ;
                         if (!user) {
-                            return [2 /*return*/, res
-                                    .status(401)
-                                    .send({ message: 'Invalid username or password asdasd' })]; // return the error message when the user does not exist
+                            return [2 /*return*/, res.status(401).send({ message: 'Invalid username or password' })]; // return the error message when the user does not exist
                         }
                         return [4 /*yield*/, bcrypt.compare(password, user.password)];
                     case 2:
                         isPasswordValid = _b.sent();
                         if (!isPasswordValid) {
-                            return [2 /*return*/, res.status(401).send({ message: 'Invalid username1111 or password' })];
+                            return [2 /*return*/, res.status(401).send({ message: 'Invalid username or password' })];
                         }
-                        console.log('====================================');
-                        console.log(isPasswordValid);
-                        console.log('====================================');
-                        token = jwt.sign({ id: user._id }, 'secretKey');
+                        token = jwt.sign({ user: user }, secretKey);
                         return [2 /*return*/, res.status(200).send({ token: token })];
                     case 3:
                         err_1 = _b.sent();
@@ -95,7 +90,7 @@ var AuthCallback = /** @class */ (function () {
                         return [4 /*yield*/, models_1.UserModel.create({
                                 email: email,
                                 name: name,
-                                hashedPassword: hashedPassword,
+                                password: hashedPassword,
                                 phone: phone,
                                 address: address,
                             })];
@@ -133,24 +128,6 @@ var AuthCallback = /** @class */ (function () {
                         res.status(500).json({ error: err_3 });
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    AuthCallback.me = function (req, res) {
-        return __awaiter(this, void 0, void 0, function () {
-            var userID, payload;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        userID = req;
-                        return [4 /*yield*/, models_1.UserModel.findOne({ _id: userID })];
-                    case 1:
-                        payload = _a.sent();
-                        if (!payload) {
-                            return [2 /*return*/, res.status(404).send({ message: 'User not found' })];
-                        }
-                        return [2 /*return*/, res.send(req)];
                 }
             });
         });
