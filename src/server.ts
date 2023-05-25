@@ -36,3 +36,31 @@ app.use('/api', AuthRouter)
 app.listen(PORT, () => {
   console.log('Server is running at port:', PORT)
 })
+
+// const mongoose = require('mongoose')
+
+// // Định nghĩa schema và model cho User
+// const userSchema = new mongoose.Schema({
+//   name: String,
+//   email: String,
+//   password: String,
+// })
+
+// const User = mongoose.model('users', userSchema)
+
+// // Tạo các đối tượng User giả lập
+// const users = [
+//   { name: 'John Doe', email: 'johndoe@gmail.com', password: 'password123' },
+//   { name: 'Jane Smith', email: 'janesmith@yahoo.com', password: '987654321' },
+// ]
+
+// // Thêm dữ liệu giả vào MongoDB
+// User.insertMany(users)
+//   .then((docs: any) => {
+//     console.log(docs)
+//   })
+//   .catch((err: any) => {
+//     console.error(err)
+//   })
+
+//Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NmNjOTZlMDAyYTc0ZGE1NGM1ZGUwOCIsImVtYWlsIjoibmdvY2RpZW5AZ21haWwuY29tIiwibmFtZSI6IkRJ4buCTiBESeG7gE4iLCJwYXNzd29yZCI6IiQyYiQxMCR6WDk5alRFQ3BaUWxRQVh5ZjlqTHB1OUlCYUV5ZHl6MzcvU3FuNUZtL295ci9wTHR4cHBRLiIsInBob25lIjoiMDEyMzQ1Njc4IiwiYWRkcmVzcyI6IjFiLDJjIGhjbSIsIl9fdiI6MH0sImlhdCI6MTY4NDkwMjM4Nn0.L2X2pYdmBpfZR9o6uDrRBehaPjfcw4a_6s_hv20HCvc

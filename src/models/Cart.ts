@@ -4,13 +4,29 @@ import defaultType from '../utils/defaultType'
 require('dotenv').config()
 
 export interface CartDoc extends Document {
-  id: string
-  quantity: string
-  status: string
-  ammount: string
-  orderDate: string
+  userId: string
+  items: [
+    {
+      productId: string
+      quantity: number
+      price: number
+    }
+  ]
+  created: Date
+  updated: Date
 }
 
-const CartSchema = new Schema<CartDoc>({})
+const CartSchema = new Schema<CartDoc>({
+  userId: defaultType.requiredString,
+  items: [
+    {
+      productId: defaultType.requiredString,
+      quantity: defaultType.number,
+      price: defaultType.number,
+    },
+  ],
+  created: defaultType.date_now,
+  updated: defaultType.date,
+})
 
 export default CartSchema

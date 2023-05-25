@@ -9,8 +9,8 @@ export interface PostDoc extends Document {
   title: string
   topic: string
   countView: number
-  createDate: any
-  createUpdate: any
+  created: Date
+  updated: Date
 }
 
 const PostSchema = new Schema<PostDoc>({
@@ -19,8 +19,8 @@ const PostSchema = new Schema<PostDoc>({
   title: defaultType.string,
   countView: defaultType.number,
   topic: defaultType.string,
-  createDate: defaultType.date_now,
-  createUpdate: defaultType.date,
+  created: defaultType.date_now,
+  updated: defaultType.date,
 })
 
 export default PostSchema

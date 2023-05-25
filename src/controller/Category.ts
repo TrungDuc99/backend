@@ -50,7 +50,13 @@ export default class UserCallback {
     try {
       const id = req.params.id
       const payload = await CategoryModel.deleteOne({ _id: id })
-      return { success: true, data: payload }
+      if (payload.deletedCount === 0) {
+        // Trường hợp không tìm thấy bài đăng cần xóa
+        return res.status(404).json({ success: false, message: 'Not found' })
+      } else {
+        // Trường hợp đã xóa thành công
+        return res.json({ success: true, message: 'Successfully deleted' })
+      }
     } catch (err) {
       res.status(500).json({ error: err })
     }

@@ -1,8 +1,9 @@
 export default {
   // generals
-  string: { type: String, default: "" },
+  string: { type: String, default: '' },
   requiredString: { type: String, required: true },
   number: { type: Number },
+  requireNumber: { type: Number, required: true },
   date: { type: Date },
   date_now: { type: Date, default: Date.now() },
   boolean: { type: Boolean, default: true },
@@ -13,4 +14,4 @@ export default {
   },
   email: { type: String, required: true },
   password: { type: String, required: true },
-};
+}

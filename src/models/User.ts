@@ -10,6 +10,8 @@ export interface UserDoc extends Document {
   isAdmin: boolean
   phone: string
   address: string
+  created: Date
+  updated: Date
 }
 
 const UserSchema = new Schema<UserDoc>({
@@ -18,6 +20,8 @@ const UserSchema = new Schema<UserDoc>({
   password: defaultType.password,
   phone: defaultType.string,
   address: defaultType.string,
+  created: defaultType.date_now,
+  updated: defaultType.date,
 })
 
 export default UserSchema

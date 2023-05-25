@@ -62,7 +62,13 @@ export default class CommentCallback {
     try {
       const productID = req.params.id
       const payload = await ProductModel.deleteOne({ _id: productID })
-      return { success: true, data: payload }
+      if (payload.deletedCount === 0) {
+        // Trường hợp không tìm thấy bài đăng cần xóa
+        return res.status(404).json({ success: false, message: 'Not found' })
+      } else {
+        // Trường hợp đã xóa thành công
+        return res.json({ success: true, message: 'Successfully deleted' })
+      }
     } catch (err) {
       res.status(500).json({ error: err })
     }

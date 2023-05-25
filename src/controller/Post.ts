@@ -64,11 +64,19 @@ export default class PostCallback {
   }
   static async delete(req: Request, res: Response) {
     try {
-      const { id } = req.params
-      const payload = await PostModel.deleteOne({ _id: id })
-      return { success: true, data: payload }
+      const postId = req.params.id
+      const payload = await PostModel.deleteOne({ _id: postId })
+
+      if (payload.deletedCount === 0) {
+        // Trường hợp không tìm thấy bài đăng cần xóa
+        return res.status(404).json({ success: false, message: 'Post not found' })
+      } else {
+        // Trường hợp đã xóa thành công
+        return res.json({ success: true, message: 'Post successfully deleted' })
+      }
     } catch (err) {
-      res.status(500).json({ error: err })
+      // Trường hợp server bị lỗi
+      res.status(500).json({ success: false, error: err })
     }
   }
 

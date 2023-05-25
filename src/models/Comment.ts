@@ -11,8 +11,8 @@ export interface CommentDoc extends Document {
   replyForCommentId: string
   countDisLikes: number
   countShare: number
-  createDate: string
-  createUpdate: string
+  created: Date
+  updated: Date
 }
 
 const CommentSchema = new Schema<CommentDoc>({
@@ -22,8 +22,8 @@ const CommentSchema = new Schema<CommentDoc>({
   countDisLikes: defaultType.number,
   countShare: defaultType.number,
   replyForCommentId: defaultType.string,
-  createDate: defaultType.string,
-  createUpdate: defaultType.string,
+  created: defaultType.date_now,
+  updated: defaultType.date,
 })
 
 export default CommentSchema
