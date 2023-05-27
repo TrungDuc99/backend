@@ -11,6 +11,7 @@ import {
   ProductRouter,
   UserRouter,
 } from './routes'
+import CartRouter from './routes/Cart'
 const bodyParser = require('body-parser')
 
 require('dotenv').config()
@@ -32,6 +33,7 @@ app.use('/api/product', ProductRouter)
 app.use('/api/category', CategoryRouter)
 app.use('/api/post', PostRouter)
 app.use('/api/comment', CommentRouter)
+app.use('/api/cart', CartRouter)
 app.use('/api', AuthRouter)
 app.listen(PORT, () => {
   console.log('Server is running at port:', PORT)
