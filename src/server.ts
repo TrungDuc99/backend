@@ -39,14 +39,19 @@ app.listen(PORT, () => {
   console.log('Server is running at port:', PORT)
 })
 
-// const mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
-// // Định nghĩa schema và model cho User
-// const userSchema = new mongoose.Schema({
-//   name: String,
-//   email: String,
-//   password: String,
-// })
+// Định nghĩa schema và model cho User
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+})
+// https://docs.mongodb.com/manual/crud/
+// https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/
+// https://binance-docs.github.io/apidocs/spot/en/#change-log
+// https://www.npmjs.com/package/jsonwebtoken
+
 
 // const User = mongoose.model('users', userSchema)
 
@@ -58,6 +63,26 @@ app.listen(PORT, () => {
 
 // // Thêm dữ liệu giả vào MongoDB
 // User.insertMany(users)
+//   .then((docs: any) => {
+//     console.log(docs)
+//   })
+//   .catch((err: any) => {
+//     console.error(err)
+//   })
+
+//----------------------------------------------------------------
+// Định nghĩa schema và model cho 
+
+// const Cart = mongoose.model('cart', )
+
+// // Tạo các đối tượng User giả lập
+// const carts = [
+//   { email: 'johndoe@gmail.com',},
+//   { email: 'janesmith@yahoo.com' },
+// ]
+
+// // Thêm dữ liệu giả vào MongoDB
+// Cart.insertMany(carts)
 //   .then((docs: any) => {
 //     console.log(docs)
 //   })

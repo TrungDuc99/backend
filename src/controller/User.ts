@@ -7,7 +7,9 @@ const secretKey: any = process.env.TOKEN_SECRET_KEY
 export default class UserCallback {
   static async get(req: Request, res: Response) {
     try {
-      const payload = await UserModel.find()
+      const payload = await UserModel.find().select(
+        'email _id name phone address created'
+      )
       return res.json({ success: true, data: payload })
     } catch (err) {
       res.status(500).json({ error: err })
@@ -16,7 +18,9 @@ export default class UserCallback {
   static async getOne(req: Request, res: Response) {
     try {
       const userID = req.params.id
-      const payload = await UserModel.findOne({ _id: userID })
+      const payload = await UserModel.findOne({ _id: userID }).select(
+        'email _id name phone address created'
+      )
       return res.json({ success: true, data: payload })
     } catch (err) {
       res.status(500).json({ error: err })
