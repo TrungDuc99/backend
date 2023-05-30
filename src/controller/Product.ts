@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { ProductModel, UserModel } from '../models'
+import { CategoryModel, ProductModel, UserModel } from '../models'
 require('dotenv').config()
 
 const secretKey: any = process.env.TOKEN_SECRET_KEY
@@ -53,6 +53,22 @@ export default class ProductCallback {
     try {
       const payload = await ProductModel.find()
       return res.json({ success: true, data: payload })
+    } catch (err) {
+      res.status(500).json({ error: err })
+    }
+  }
+  static async getProductByCategory(req: Request, res: Response) {
+    try {
+      const id = req.params.id
+      const category = await CategoryModel.findOne({ _id: id })
+
+      if (category) {
+        const payload = await ProductModel.find({
+          categoryId: category._id,
+        })
+
+        return res.json({ success: true, data: payload })
+      } else return res.status(404).json({ success: false, message: 'Not found' })
     } catch (err) {
       res.status(500).json({ error: err })
     }

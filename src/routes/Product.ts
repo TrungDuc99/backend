@@ -5,6 +5,11 @@ import { authenticateToken } from '../middleware/AuthenticateToken'
 const ProductRouter = Router()
 
 ProductRouter.get('/', authenticateToken, ProductCallback.get)
+ProductRouter.get(
+  '/categoryId/:id',
+  authenticateToken,
+  ProductCallback.getProductByCategory
+)
 ProductRouter.post('/', authenticateToken, ProductCallback.create)
 ProductRouter.put('/', authenticateToken, ProductCallback.update)
 ProductRouter.delete('/:id', authenticateToken, ProductCallback.delete)

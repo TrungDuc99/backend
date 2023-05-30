@@ -19,3 +19,7 @@ const that = (module.exports = {
     return { flag: true, code: 'is Okay' }
   },
 })
+// https://docs.mongodb.com/manual/crud/
+// https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/
+// https://binance-docs.github.io/apidocs/spot/en/#change-log
+// https://www.npmjs.com/package/jsonwebtoken

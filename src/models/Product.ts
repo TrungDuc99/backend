@@ -4,7 +4,7 @@ import defaultType from '../utils/defaultType'
 require('dotenv').config()
 
 export interface ProductDoc extends Document {
-  id: string
+  categoryId: string
   name: string
   description: string
   image: string
@@ -16,6 +16,7 @@ export interface ProductDoc extends Document {
 
 const ProductSchema = new Schema<ProductDoc>({
   name: defaultType.string,
+  categoryId: defaultType.string,
   description: defaultType.string,
   image: defaultType.string,
   isActive: defaultType.boolean,

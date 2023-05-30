@@ -10,6 +10,7 @@ export interface CartDoc extends Document {
       productId: string
       quantity: number
       price: number
+      totalPrice: number
     }
   ]
   created: Date
@@ -23,6 +24,7 @@ const CartSchema = new Schema<CartDoc>({
       productId: defaultType.requiredString,
       quantity: defaultType.number,
       price: defaultType.number,
+      totalPrice: defaultType.number,
     },
   ],
   created: defaultType.date_now,
