@@ -28,25 +28,12 @@ export const authenticateToken = (
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' })
   }
-  // try {
-  //   const decodedToken = jwt.verify(token, secretKey) as User
-  //   req.user = decodedToken
-  //   next()
-  // } catch (err) {
-  //   console.error(err)
-  //   return res.status(403).json({ message: 'Forbidden' })
-  // }
-  jwt.verify(token, secretKey, (err: any, user: any) => {
-    if (err) {
-      return res.sendStatus(403)
-    }
-    // Kiểm tra thời gian hết hạn của token
-    const currentTime = Math.floor(Date.now() / 1000)
-    const expirationTime = currentTime + 10 //thời gian hết hạn sau 10 giây
-    if (user.exp < expirationTime) {
-      return res.status(401).json({ message: 'Token has expired' })
-    }
-    req.user = user
+  try {
+    const decodedToken = jwt.verify(token, secretKey) as User
+    req.user = decodedToken
     next()
-  })
+  } catch (err) {
+    console.error(err)
+    return res.status(403).json({ message: 'Token has expired' })
+  }
 }

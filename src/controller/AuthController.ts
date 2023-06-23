@@ -21,7 +21,9 @@ export default class AuthCallback {
         return res.status(401).send({ message: 'Invalid username or password' })
       }
       // Tạo JWT token và trả về cho client
-      const token = jwt.sign({ user }, secretKey)
+      const token = jwt.sign({ user }, secretKey, {
+        expiresIn: '30d', // expires in 30 days
+      })
       return res.status(200).send({ token })
     } catch (err) {
       res.status(500).json({ error: err })
@@ -68,4 +70,3 @@ export default class AuthCallback {
     return res.send(payload) // Trả về thông tin user.
   }
 }
-
