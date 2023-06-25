@@ -30,10 +30,10 @@ export default class AuthCallback {
             phone: user.phone,
             address: user.address,
           },
-        }
-        // secretKey,
+        },
+        secretKey
         // {
-        //   expiresIn: '30', // expires in 30 days
+        //   expiresIn: '30s', // expires in 30 days
         // }
       )
       return res.status(200).send({ token })
