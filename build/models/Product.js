@@ -8,11 +8,12 @@ var defaultType_1 = __importDefault(require("../utils/defaultType"));
 require('dotenv').config();
 var ProductSchema = new mongoose_1.Schema({
     name: defaultType_1.default.string,
+    categoryId: defaultType_1.default.string,
     description: defaultType_1.default.string,
     image: defaultType_1.default.string,
     isActive: defaultType_1.default.boolean,
     price: defaultType_1.default.string,
-    category: defaultType_1.default.string,
-    create_date: defaultType_1.default.string,
+    created: defaultType_1.default.date_now,
+    updated: defaultType_1.default.date,
 });
 exports.default = ProductSchema;

@@ -97,8 +97,6 @@ var UserCallback = /** @class */ (function () {
                         _b.trys.push([0, 2, , 3]);
                         _id = req.params._id;
                         _a = req.body, name = _a.name, description = _a.description, category = _a.category, image = _a.image, id = _a.id;
-                        console.log('====================================');
-                        console.log(_id, name, id);
                         return [4 /*yield*/, models_1.CategoryModel.findOneAndUpdate({ _id: _id }, { name: name, description: description, category: category, image: image, id: id })];
                     case 1:
                         payload = _b.sent();
@@ -123,7 +121,15 @@ var UserCallback = /** @class */ (function () {
                         return [4 /*yield*/, models_1.CategoryModel.deleteOne({ _id: id })];
                     case 1:
                         payload = _a.sent();
-                        return [2 /*return*/, { success: true, data: payload }];
+                        if (payload.deletedCount === 0) {
+                            // Trường hợp không tìm thấy bài đăng cần xóa
+                            return [2 /*return*/, res.status(404).json({ success: false, message: 'Not found' })];
+                        }
+                        else {
+                            // Trường hợp đã xóa thành công
+                            return [2 /*return*/, res.json({ success: true, message: 'Successfully deleted' })];
+                        }
+                        return [3 /*break*/, 3];
                     case 2:
                         err_4 = _a.sent();
                         res.status(500).json({ error: err_4 });

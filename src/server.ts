@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
 
 // const User = mongoose.model('users', userSchema)
 
-// Tạo các đối tượng User giả lập
+// // Tạo các đối tượng User giả lập
 // const users = [
 //   { name: 'John Doe', email: 'johndoe@gmail.com', password: 'password123' },
 //   { name: 'Jane Smith', email: 'janesmith@yahoo.com', password: '987654321' },

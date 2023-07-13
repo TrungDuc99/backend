@@ -37,101 +37,71 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var models_1 = require("../models");
-var jwt = require('jsonwebtoken');
 require('dotenv').config();
-var bcrypt = require('bcrypt');
 var secretKey = process.env.TOKEN_SECRET_KEY;
-var AuthCallback = /** @class */ (function () {
-    function AuthCallback() {
+var CartCallback = /** @class */ (function () {
+    function CartCallback() {
     }
-    AuthCallback.login = function (req, res) {
+    CartCallback.get = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, email, password, user, isPasswordValid, token, err_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var payload, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 3, , 4]);
-                        _a = req.body, email = _a.email, password = _a.password;
-                        return [4 /*yield*/, models_1.UserModel.findOne({ email: email })]; // find the user by email
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, models_1.CartModel.find()];
                     case 1:
-                        user = _b.sent() // find the user by email
-                        ;
-                        if (!user) {
-                            return [2 /*return*/, res.status(401).send({ message: 'Invalid username or password' })]; // return the error message when the user does not exist
-                        }
-                        return [4 /*yield*/, bcrypt.compare(password, user.password)];
+                        payload = _a.sent();
+                        return [2 /*return*/, res.json({ success: true, data: payload })];
                     case 2:
-                        isPasswordValid = _b.sent();
-                        if (!isPasswordValid) {
-                            return [2 /*return*/, res.status(401).send({ message: 'Invalid username or password' })];
-                        }
-                        token = jwt.sign({
-                            user: {
-                                uid: user._id,
-                                email: user.email,
-                                name: user.name,
-                                phone: user.phone,
-                                address: user.address,
-                            },
-                        }, secretKey
-                        // {
-                        //   expiresIn: '30s', // expires in 30 days
-                        // }
-                        );
-                        return [2 /*return*/, res.status(200).send({ token: token })];
-                    case 3:
-                        err_1 = _b.sent();
+                        err_1 = _a.sent();
                         res.status(500).json({ error: err_1 });
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    AuthCallback.register = function (req, res) {
+    CartCallback.create = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, email, name, password, phone, address, hashedPassword, payload, err_2;
+            var _a, userId, items, user, payload, err_2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _b.trys.push([0, 3, , 4]);
-                        _a = req.body, email = _a.email, name = _a.name, password = _a.password, phone = _a.phone, address = _a.address;
-                        return [4 /*yield*/, bcrypt.hash(password, 10)];
+                        _b.trys.push([0, 5, , 6]);
+                        _a = req.body, userId = _a.userId, items = _a.items;
+                        return [4 /*yield*/, models_1.UserModel.findOne({ _id: userId })];
                     case 1:
-                        hashedPassword = _b.sent();
-                        return [4 /*yield*/, models_1.UserModel.create({
-                                email: email,
-                                name: name,
-                                password: hashedPassword,
-                                phone: phone,
-                                address: address,
+                        user = _b.sent();
+                        if (!user) return [3 /*break*/, 3];
+                        return [4 /*yield*/, models_1.CartModel.create({
+                                userId: userId,
+                                items: items,
                             })];
                     case 2:
                         payload = _b.sent();
                         return [2 /*return*/, res.json({ success: true, data: payload })];
-                    case 3:
+                    case 3: return [2 /*return*/, res.status(404).json({ success: false, message: 'Not found' })];
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
                         err_2 = _b.sent();
                         res.status(500).json({ error: err_2 });
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
     };
-    AuthCallback.logout = function (req, res) {
+    CartCallback.update = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, name, description, image, id, payload, err_3;
+            var _id, _a, name, description, category, image, id, payload, err_3;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _b.trys.push([0, 2, , 3]);
-                        _a = req.body, name = _a.name, description = _a.description, image = _a.image, id = _a.id;
-                        return [4 /*yield*/, models_1.UserModel.create({
-                                name: name,
-                                id: id,
-                                description: description,
-                                image: image,
-                            })];
+                        _id = req.params._id;
+                        _a = req.body, name = _a.name, description = _a.description, category = _a.category, image = _a.image, id = _a.id;
+                        return [4 /*yield*/, models_1.CartModel.findOneAndUpdate({ _id: _id }, { name: name, description: description, category: category, image: image, id: id })];
                     case 1:
                         payload = _b.sent();
                         return [2 /*return*/, res.json({ success: true, data: payload })];
@@ -144,25 +114,35 @@ var AuthCallback = /** @class */ (function () {
             });
         });
     };
-    AuthCallback.me = function (req, res) {
+    CartCallback.delete = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var userID, payload;
+            var id, payload, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        userID = req.user.user._id // Lấy id của user.
-                        ;
-                        return [4 /*yield*/, models_1.UserModel.findOne({ _id: userID })];
+                        _a.trys.push([0, 2, , 3]);
+                        id = req.params.id;
+                        return [4 /*yield*/, models_1.CartModel.deleteOne({ _id: id })];
                     case 1:
                         payload = _a.sent();
-                        if (!payload) {
-                            return [2 /*return*/, res.status(404).send({ message: 'User not found' })];
+                        if (payload.deletedCount === 0) {
+                            // Trường hợp không tìm thấy bài đăng cần xóa
+                            return [2 /*return*/, res.status(404).json({ success: false, message: 'Not found' })];
                         }
-                        return [2 /*return*/, res.send(payload)]; // Trả về thông tin user.
+                        else {
+                            // Trường hợp đã xóa thành công
+                            return [2 /*return*/, res.json({ success: true, message: 'Successfully deleted' })];
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_4 = _a.sent();
+                        res.status(500).json({ error: err_4 });
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    return AuthCallback;
+    return CartCallback;
 }());
-exports.default = AuthCallback;
+exports.default = CartCallback;

@@ -7,9 +7,10 @@ var mongoose_1 = require("mongoose");
 var defaultType_1 = __importDefault(require("../utils/defaultType"));
 require('dotenv').config();
 var CategorySchema = new mongoose_1.Schema({
-    id: defaultType_1.default.string,
     name: defaultType_1.default.string,
     description: defaultType_1.default.string,
     image: defaultType_1.default.string,
+    created: defaultType_1.default.date_now,
+    updated: defaultType_1.default.date,
 });
 exports.default = CategorySchema;

@@ -49,7 +49,7 @@ var UserCallback = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, models_1.UserModel.find()];
+                        return [4 /*yield*/, models_1.UserModel.find().select('email _id name phone address created')];
                     case 1:
                         payload = _a.sent();
                         return [2 /*return*/, res.json({ success: true, data: payload })];
@@ -70,7 +70,7 @@ var UserCallback = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         userID = req.params.id;
-                        return [4 /*yield*/, models_1.UserModel.findOne({ _id: userID })];
+                        return [4 /*yield*/, models_1.UserModel.findOne({ _id: userID }).select('email _id name phone address created')];
                     case 1:
                         payload = _a.sent();
                         return [2 /*return*/, res.json({ success: true, data: payload })];
@@ -143,7 +143,15 @@ var UserCallback = /** @class */ (function () {
                         return [4 /*yield*/, models_1.UserModel.deleteOne({ _id: userID })];
                     case 1:
                         payload = _a.sent();
-                        return [2 /*return*/, { success: true, data: payload }];
+                        if (payload.deletedCount === 0) {
+                            // Trường hợp không tìm thấy bài đăng cần xóa
+                            return [2 /*return*/, res.status(404).json({ success: false, message: 'Not found' })];
+                        }
+                        else {
+                            // Trường hợp đã xóa thành công
+                            return [2 /*return*/, res.json({ success: true, message: 'Successfully deleted' })];
+                        }
+                        return [3 /*break*/, 3];
                     case 2:
                         err_5 = _a.sent();
                         res.status(500).json({ error: err_5 });

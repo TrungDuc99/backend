@@ -6,7 +6,7 @@ const connectDatabase = () => {
 
   mongoose
     .connect(
-      `mongodb+srv://trungduc:iguU1kAILF6PodFc@cluster0.udvwwuc.mongodb.net/test`
+      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.xwaiv0u.mongodb.net/${process.env.DB_NAME}`
     )
     .then(() => {
       console.log('Database connection created')

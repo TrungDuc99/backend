@@ -8,7 +8,7 @@ require('dotenv').config();
 var connectDatabase = function () {
     mongoose_1.default.Promise = require('bluebird');
     mongoose_1.default
-        .connect("mongodb+srv://trungduc:iguU1kAILF6PodFc@cluster0.udvwwuc.mongodb.net/test")
+        .connect("mongodb+srv://".concat(process.env.DB_USERNAME, ":").concat(process.env.DB_PASSWORD, "@").concat(process.env.DB_URLDEV || process.env.DB_URL, "/").concat(process.env.DB_NAME))
         .then(function () {
         console.log('Database connection created');
     })
