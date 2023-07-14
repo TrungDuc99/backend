@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { UserModel } from '../models'
 require('dotenv').config()
-
+const jwt = require('jsonwebtoken')
 const secretKey: any = process.env.TOKEN_SECRET_KEY
 
 export default class UserCallback {
@@ -19,6 +19,19 @@ export default class UserCallback {
     try {
       const userID = req.params.id
       const payload = await UserModel.findOne({ _id: userID }).select(
+        'email _id name phone address created'
+      )
+      return res.json({ success: true, data: payload })
+    } catch (err) {
+      res.status(500).json({ error: err })
+    }
+  }
+  static async getInfo(req: Request, res: Response) {
+    try {
+      const token = req.headers.authorization?.split(' ')?.[1]
+      const data = jwt.decode(token)
+
+      const payload = await UserModel.findOne({ _id: data.user.uid }).select(
         'email _id name phone address created'
       )
       return res.json({ success: true, data: payload })
