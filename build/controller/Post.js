@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -83,31 +94,20 @@ var PostCallback = /** @class */ (function () {
             });
         });
     };
-    PostCallback.create = function (req, res) {
+    PostCallback.getPostByUserId = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, content, userId, title, topic, payload, err_3;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var userId, payload, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        _a = req.body, content = _a.content, userId = _a.userId, title = _a.title, topic = _a.topic;
-                        // Kiểm tra xem userId đã được cung cấp hay chưa
-                        if (!userId || userId === '') {
-                            // Nếu không, trả về một thông báo lỗi
-                            return [2 /*return*/, res.status(400).json({ error: 'userId is required' })];
-                        }
-                        return [4 /*yield*/, models_1.PostModel.create({
-                                content: content,
-                                userId: userId,
-                                title: title,
-                                topic: topic,
-                                countView: 0,
-                            })];
+                        _a.trys.push([0, 2, , 3]);
+                        userId = req.params.id;
+                        return [4 /*yield*/, models_1.PostModel.find({ userId: userId })];
                     case 1:
-                        payload = _b.sent();
-                        return [2 /*return*/, res.json({ success: true, data: payload })];
+                        payload = _a.sent();
+                        return [2 /*return*/, res.json({ success: true, data: { payload: payload } })];
                     case 2:
-                        err_3 = _b.sent();
+                        err_3 = _a.sent();
                         res.status(500).json({ error: err_3 });
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -115,9 +115,34 @@ var PostCallback = /** @class */ (function () {
             });
         });
     };
+    PostCallback.create = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, content, userId, title, topic, payload, err_4;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 4, , 5]);
+                        _a = req.body, content = _a.content, userId = _a.userId, title = _a.title, topic = _a.topic;
+                        if (!(!userId || userId === '')) return [3 /*break*/, 1];
+                        // Nếu không, trả về một thông báo lỗi
+                        return [2 /*return*/, res.status(400).json({ error: 'userId is required' })];
+                    case 1: return [4 /*yield*/, models_1.PostModel.create(__assign({}, req.body))];
+                    case 2:
+                        payload = _b.sent();
+                        return [2 /*return*/, res.json({ success: true, data: payload })];
+                    case 3: return [3 /*break*/, 5];
+                    case 4:
+                        err_4 = _b.sent();
+                        res.status(500).json({ error: err_4 });
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
     PostCallback.update = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var idReq, _a, name, description, image, id, price, category, isActive, payload, err_4;
+            var idReq, _a, name, description, image, id, price, category, isActive, payload, err_5;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -132,8 +157,8 @@ var PostCallback = /** @class */ (function () {
                     case 2: return [2 /*return*/, res.status(404).send({ message: 'Mã không trùng khớp' })];
                     case 3: return [3 /*break*/, 5];
                     case 4:
-                        err_4 = _b.sent();
-                        res.status(500).json({ error: err_4 });
+                        err_5 = _b.sent();
+                        res.status(500).json({ error: err_5 });
                         return [3 /*break*/, 5];
                     case 5: return [2 /*return*/];
                 }
@@ -142,7 +167,7 @@ var PostCallback = /** @class */ (function () {
     };
     PostCallback.delete = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var postId, payload, err_5;
+            var postId, payload, err_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -161,9 +186,9 @@ var PostCallback = /** @class */ (function () {
                         }
                         return [3 /*break*/, 3];
                     case 2:
-                        err_5 = _a.sent();
+                        err_6 = _a.sent();
                         // Trường hợp server bị lỗi
-                        res.status(500).json({ success: false, error: err_5 });
+                        res.status(500).json({ success: false, error: err_6 });
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -172,34 +197,12 @@ var PostCallback = /** @class */ (function () {
     };
     PostCallback.createGraphQL = function (params) {
         return __awaiter(this, void 0, void 0, function () {
-            var payload, err_6;
+            var payload, err_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, models_1.PostModel.create(params)];
-                    case 1:
-                        payload = _a.sent();
-                        return [2 /*return*/, payload];
-                    case 2:
-                        err_6 = _a.sent();
-                        console.log(err_6);
-                        return [2 /*return*/, false];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    PostCallback.updateGraphQL = function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            var id, payload, err_7;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        console.log(params);
-                        id = params.id;
-                        return [4 /*yield*/, models_1.PostModel.findOneAndUpdate({ _id: id }, params)];
                     case 1:
                         payload = _a.sent();
                         return [2 /*return*/, payload];
@@ -212,9 +215,31 @@ var PostCallback = /** @class */ (function () {
             });
         });
     };
-    PostCallback.getGraphQL = function (params) {
+    PostCallback.updateGraphQL = function (params) {
         return __awaiter(this, void 0, void 0, function () {
             var id, payload, err_8;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        console.log(params);
+                        id = params.id;
+                        return [4 /*yield*/, models_1.PostModel.findOneAndUpdate({ _id: id }, params)];
+                    case 1:
+                        payload = _a.sent();
+                        return [2 /*return*/, payload];
+                    case 2:
+                        err_8 = _a.sent();
+                        console.log(err_8);
+                        return [2 /*return*/, false];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    PostCallback.getGraphQL = function (params) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, payload, err_9;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -225,7 +250,7 @@ var PostCallback = /** @class */ (function () {
                         payload = _a.sent();
                         return [2 /*return*/, payload];
                     case 2:
-                        err_8 = _a.sent();
+                        err_9 = _a.sent();
                         return [2 /*return*/, false];
                     case 3: return [2 /*return*/];
                 }
@@ -234,7 +259,7 @@ var PostCallback = /** @class */ (function () {
     };
     PostCallback.getAllProductGraphQL = function (params, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var payload, err_9;
+            var payload, err_10;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -245,7 +270,7 @@ var PostCallback = /** @class */ (function () {
                         console.log(payload);
                         return [2 /*return*/, res.json({ success: true, data: payload })];
                     case 2:
-                        err_9 = _a.sent();
+                        err_10 = _a.sent();
                         return [2 /*return*/, false];
                     case 3: return [2 /*return*/];
                 }

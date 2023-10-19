@@ -13,6 +13,7 @@ var Post_1 = __importDefault(require("./Post"));
 var Cart_1 = __importDefault(require("./Cart"));
 var UserModel = mongoose_1.default.model('User', User_1.default);
 exports.UserModel = UserModel;
+UserModel.collection.createIndex({ name: 'text', email: 'text' });
 var ProductModel = mongoose_1.default.model('Product', Product_1.default);
 exports.ProductModel = ProductModel;
 var CategoryModel = mongoose_1.default.model('Category', Category_1.default);

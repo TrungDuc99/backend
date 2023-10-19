@@ -7,7 +7,7 @@ import {
   AuthRouter,
   CategoryRouter,
   CommentRouter,
-  PostRouter,
+  PostsRouter,
   ProductRouter,
   UserRouter,
 } from './routes'
@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/api/user', UserRouter)
 app.use('/api/product', ProductRouter)
 app.use('/api/category', CategoryRouter)
-app.use('/api/post', PostRouter)
+app.use('/api/posts', PostsRouter)
 app.use('/api/comment', CommentRouter)
 app.use('/api/cart', CartRouter)
 app.use('/api', AuthRouter)

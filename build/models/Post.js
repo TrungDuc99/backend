@@ -19,8 +19,12 @@ var defaultType_1 = __importDefault(require("../utils/defaultType"));
 require('dotenv').config();
 var PostSchema = new mongoose_1.Schema({
     content: defaultType_1.default.string,
+    description: defaultType_1.default.string,
     userId: __assign(__assign({}, defaultType_1.default.string), { required: true }),
     title: defaultType_1.default.string,
+    image: [],
+    countLike: defaultType_1.default.number,
+    countComment: defaultType_1.default.number,
     countView: defaultType_1.default.number,
     topic: defaultType_1.default.string,
     created: defaultType_1.default.date_now,

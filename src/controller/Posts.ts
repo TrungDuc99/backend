@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
-import { PostModel, ProductModel, UserModel } from '../models'
-import { PostDoc } from '../models/Post'
+import { PostsModel, UserModel } from '../models'
+import { PostsDoc } from '../models/Posts'
 require('dotenv').config()
 
 const secretKey: any = process.env.TOKEN_SECRET_KEY
 
-export default class PostCallback {
+export default class PostsCallback {
   static async get(req: Request, res: Response) {
     try {
-      const payload = await PostModel.find()
+      const payload = await PostsModel.find()
       return res.json({ success: true, data: payload })
     } catch (err) {
       res.status(500).json({ error: err })
@@ -17,7 +17,16 @@ export default class PostCallback {
   static async getOne(req: Request, res: Response) {
     try {
       const postID = req.params.id
-      const payload = await PostModel.findOne({ _id: postID })
+      const payload = await PostsModel.findOne({ _id: postID })
+      return res.json({ success: true, data: { payload } })
+    } catch (err) {
+      res.status(500).json({ error: err })
+    }
+  }
+  static async getPostsByUserId(req: Request, res: Response) {
+    try {
+      const userId = req.params.id
+      const payload = await PostsModel.find({ userId: userId })
       return res.json({ success: true, data: { payload } })
     } catch (err) {
       res.status(500).json({ error: err })
@@ -25,23 +34,16 @@ export default class PostCallback {
   }
   static async create(req: Request, res: Response) {
     try {
-      const { content, userId, title, topic }: PostDoc = req.body
+      const { content, userId, title, topic }: PostsDoc = req.body
 
       // Kiểm tra xem userId đã được cung cấp hay chưa
       if (!userId || userId === '') {
         // Nếu không, trả về một thông báo lỗi
         return res.status(400).json({ error: 'userId is required' })
+      } else {
+        const payload = await PostsModel.create({ ...req.body })
+        return res.json({ success: true, data: payload })
       }
-
-      const payload = await PostModel.create({
-        content,
-        userId,
-        title,
-        topic,
-        countView: 0,
-      })
-
-      return res.json({ success: true, data: payload })
     } catch (err) {
       res.status(500).json({ error: err })
     }
@@ -52,7 +54,7 @@ export default class PostCallback {
 
       const { name, description, image, id, price, category, isActive } = req.body
       if (idReq === id) {
-        const payload = await PostModel.findOneAndUpdate(
+        const payload = await PostsModel.findOneAndUpdate(
           { _id: id },
           { name, description, image, isActive, id, price, category }
         )
@@ -65,7 +67,7 @@ export default class PostCallback {
   static async delete(req: Request, res: Response) {
     try {
       const postId = req.params.id
-      const payload = await PostModel.deleteOne({ _id: postId })
+      const payload = await PostsModel.deleteOne({ _id: postId })
 
       if (payload.deletedCount === 0) {
         // Trường hợp không tìm thấy bài đăng cần xóa
@@ -82,7 +84,7 @@ export default class PostCallback {
 
   static async createGraphQL(params: any) {
     try {
-      const payload = await PostModel.create(params)
+      const payload = await PostsModel.create(params)
       return payload
     } catch (err) {
       console.log(err)
@@ -94,7 +96,7 @@ export default class PostCallback {
     try {
       console.log(params)
       const { id } = params
-      const payload = await PostModel.findOneAndUpdate({ _id: id }, params)
+      const payload = await PostsModel.findOneAndUpdate({ _id: id }, params)
 
       return payload
     } catch (err) {
@@ -106,7 +108,7 @@ export default class PostCallback {
   static async getGraphQL(params: any) {
     try {
       const { id } = params
-      const payload = await PostModel.findOne({ _id: id })
+      const payload = await PostsModel.findOne({ _id: id })
 
       return payload
     } catch (err) {
@@ -115,7 +117,7 @@ export default class PostCallback {
   }
   static async getAllProductGraphQL(params: any, res: Response) {
     try {
-      const payload = await PostModel.find()
+      const payload = await PostsModel.find()
       console.log(payload)
 
       return res.json({ success: true, data: payload })

@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -41,6 +52,7 @@ var jwt = require('jsonwebtoken');
 require('dotenv').config();
 var bcrypt = require('bcrypt');
 var secretKey = process.env.TOKEN_SECRET_KEY;
+var secretKeyID = process.env.TOKEN_SECRET_KEY_ID_COCIAL;
 var AuthCallback = /** @class */ (function () {
     function AuthCallback() {
     }
@@ -68,6 +80,7 @@ var AuthCallback = /** @class */ (function () {
                         token = jwt.sign({
                             user: {
                                 uid: user._id,
+                                typeAccount: user.typeAccount,
                                 email: user.email,
                                 name: user.name,
                                 phone: user.phone,
@@ -88,39 +101,112 @@ var AuthCallback = /** @class */ (function () {
             });
         });
     };
+    AuthCallback.loginBySocial = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, id, data, user, token, payload, token, err_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 5, , 6]);
+                        _a = req.body, id = _a.id, data = _a.data;
+                        return [4 /*yield*/, models_1.UserModel.findOne({ id: id })];
+                    case 1:
+                        user = _b.sent();
+                        if (!user) return [3 /*break*/, 2];
+                        token = jwt.sign({
+                            user: {
+                                uid: user._id,
+                                id: user.id,
+                                avatarUrl: user.avatarUrl,
+                                typeAccount: user.typeAccount,
+                                email: user.email,
+                                name: user.name,
+                                phone: user.phone,
+                                address: user.address,
+                            },
+                        }, secretKey);
+                        return [2 /*return*/, res.status(200).send({ token: token, newUser: false })];
+                    case 2: return [4 /*yield*/, models_1.UserModel.create(__assign(__assign({}, data), { password: '' }))];
+                    case 3:
+                        payload = _b.sent();
+                        token = jwt.sign({
+                            user: __assign({}, data),
+                        }, secretKey);
+                        return [2 /*return*/, res.status(200).send({ token: token, newUser: true, data: payload })];
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
+                        err_2 = _b.sent();
+                        res.status(500).json({ error: err_2 });
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
     AuthCallback.register = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, email, name, password, phone, address, hashedPassword, payload, err_2;
+            var _a, email, id, name, password, phone, address, avatarUrl, hashedPassword, payload, err_3;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _b.trys.push([0, 3, , 4]);
-                        _a = req.body, email = _a.email, name = _a.name, password = _a.password, phone = _a.phone, address = _a.address;
+                        _a = req.body, email = _a.email, id = _a.id, name = _a.name, password = _a.password, phone = _a.phone, address = _a.address, avatarUrl = _a.avatarUrl;
                         return [4 /*yield*/, bcrypt.hash(password, 10)];
                     case 1:
                         hashedPassword = _b.sent();
                         return [4 /*yield*/, models_1.UserModel.create({
                                 email: email,
                                 name: name,
+                                id: id,
+                                typeAccount: 0,
                                 password: hashedPassword,
                                 phone: phone,
+                                avatarUrl: avatarUrl,
                                 address: address,
                             })];
                     case 2:
                         payload = _b.sent();
-                        return [2 /*return*/, res.json({ success: true, data: payload })];
+                        return [2 /*return*/, res.json({ succeeded: true, data: payload })];
                     case 3:
-                        err_2 = _b.sent();
-                        res.status(500).json({ error: err_2 });
+                        err_3 = _b.sent();
+                        res.status(500).json({ error: err_3 });
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
+    AuthCallback.registerBySocial = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, email, id, name, birthday, avatarUrl, typeAccount, payload, err_4;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        _a = req.body, email = _a.email, id = _a.id, name = _a.name, birthday = _a.birthday, avatarUrl = _a.avatarUrl, typeAccount = _a.typeAccount;
+                        return [4 /*yield*/, models_1.UserModel.create({
+                                email: email,
+                                name: name,
+                                typeAccount: typeAccount,
+                                id: id,
+                                birthday: birthday,
+                                avatarUrl: avatarUrl,
+                            })];
+                    case 1:
+                        payload = _b.sent();
+                        return [2 /*return*/, res.json({ succeeded: true, data: payload })];
+                    case 2:
+                        err_4 = _b.sent();
+                        res.status(500).json({ error: err_4 });
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     AuthCallback.logout = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, name, description, image, id, payload, err_3;
+            var _a, name, description, image, id, payload, err_5;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -134,10 +220,10 @@ var AuthCallback = /** @class */ (function () {
                             })];
                     case 1:
                         payload = _b.sent();
-                        return [2 /*return*/, res.json({ success: true, data: payload })];
+                        return [2 /*return*/, res.json({ succeeded: true, data: payload })];
                     case 2:
-                        err_3 = _b.sent();
-                        res.status(500).json({ error: err_3 });
+                        err_5 = _b.sent();
+                        res.status(500).json({ error: err_5 });
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -146,19 +232,36 @@ var AuthCallback = /** @class */ (function () {
     };
     AuthCallback.me = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var userID, payload;
+            var userID, id, payload, err_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        _a.trys.push([0, 5, , 6]);
                         userID = req.user.user._id // Lấy id của user.
                         ;
+                        id = req.user.user.id;
+                        payload = void 0;
+                        if (!userID) return [3 /*break*/, 2];
                         return [4 /*yield*/, models_1.UserModel.findOne({ _id: userID })];
                     case 1:
                         payload = _a.sent();
+                        return [3 /*break*/, 4];
+                    case 2:
+                        if (!id) return [3 /*break*/, 4];
+                        return [4 /*yield*/, models_1.UserModel.findOne({ id: id })];
+                    case 3:
+                        payload = _a.sent();
+                        _a.label = 4;
+                    case 4:
                         if (!payload) {
                             return [2 /*return*/, res.status(404).send({ message: 'User not found' })];
                         }
-                        return [2 /*return*/, res.send(payload)]; // Trả về thông tin user.
+                        return [2 /*return*/, res.send(payload)];
+                    case 5:
+                        err_6 = _a.sent();
+                        res.status(500).json({ error: err_6 });
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
                 }
             });
         });

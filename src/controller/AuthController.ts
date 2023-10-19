@@ -5,6 +5,8 @@ require('dotenv').config()
 const bcrypt = require('bcrypt')
 const secretKey: any = process.env.TOKEN_SECRET_KEY
 
+const secretKeyID: any = process.env.TOKEN_SECRET_KEY_ID_COCIAL
+
 export default class AuthCallback {
   static async login(req: Request, res: Response) {
     try {
@@ -25,6 +27,7 @@ export default class AuthCallback {
         {
           user: {
             uid: user._id,
+            typeAccount: user.typeAccount,
             email: user.email,
             name: user.name,
             phone: user.phone,
@@ -41,19 +44,84 @@ export default class AuthCallback {
       res.status(500).json({ error: err })
     }
   }
+  static async loginBySocial(req: Request, res: Response) {
+    try {
+      const { id, data } = req.body
+
+      const user = await UserModel.findOne({ id: id })
+
+      if (user) {
+        const token = jwt.sign(
+          {
+            user: {
+              uid: user._id,
+              id: user.id,
+              avatarUrl: user.avatarUrl,
+              typeAccount: user.typeAccount,
+              email: user.email,
+              name: user.name,
+              phone: user.phone,
+              address: user.address,
+            },
+          },
+          secretKey
+        )
+        return res.status(200).send({ token, newUser: false })
+      } else {
+        const payload = await UserModel.create({
+          ...data,
+          password: '',
+        })
+
+        const token = jwt.sign(
+          {
+            user: {
+              ...data,
+            },
+          },
+          secretKey
+        )
+
+        return res.status(200).send({ token, newUser: true, data: payload })
+      }
+    } catch (err) {
+      res.status(500).json({ error: err })
+    }
+  }
   static async register(req: Request, res: Response) {
     try {
-      const { email, name, password, phone, address } = req.body
+      const { email, id, name, password, phone, address, avatarUrl } = req.body
       const hashedPassword = await bcrypt.hash(password, 10)
       const payload = await UserModel.create({
         email,
         name,
+        id,
+        typeAccount: 0,
         password: hashedPassword,
         phone,
+        avatarUrl,
         address,
       })
 
-      return res.json({ success: true, data: payload })
+      return res.json({ succeeded: true, data: payload })
+    } catch (err) {
+      res.status(500).json({ error: err })
+    }
+  }
+  static async registerBySocial(req: Request, res: Response) {
+    try {
+      const { email, id, name, birthday, avatarUrl, typeAccount } = req.body
+
+      const payload = await UserModel.create({
+        email,
+        name,
+        typeAccount,
+        id,
+        birthday,
+        avatarUrl,
+      })
+
+      return res.json({ succeeded: true, data: payload })
     } catch (err) {
       res.status(500).json({ error: err })
     }
@@ -68,17 +136,30 @@ export default class AuthCallback {
         description,
         image,
       })
-      return res.json({ success: true, data: payload })
+      return res.json({ succeeded: true, data: payload })
     } catch (err) {
       res.status(500).json({ error: err })
     }
   }
   static async me(req: any, res: Response) {
-    const userID = req.user.user._id // Lấy id của user.
-    const payload = await UserModel.findOne({ _id: userID })
-    if (!payload) {
-      return res.status(404).send({ message: 'User not found' })
+    try {
+      const userID = req.user.user._id // Lấy id của user.
+      const id = req.user.user.id
+      let payload
+
+      if (userID) {
+        payload = await UserModel.findOne({ _id: userID })
+      } else if (id) {
+        payload = await UserModel.findOne({ id: id })
+      }
+
+      if (!payload) {
+        return res.status(404).send({ message: 'User not found' })
+      }
+
+      return res.send(payload)
+    } catch (err) {
+      res.status(500).json({ error: err })
     }
-    return res.send(payload) // Trả về thông tin user.
   }
 }
