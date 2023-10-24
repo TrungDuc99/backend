@@ -3,10 +3,15 @@ require('dotenv').config()
 
 const connectDatabase = () => {
   mongoose.Promise = require('bluebird')
+  const urlConnection = `mongodb+srv://${process.env.DB_USERNAME}:${
+    process.env.DB_PASSWORD
+  }@${process.env.DB_URLDEV || process.env.DB_URL}/${process.env.DB_NAME}`
 
   mongoose
     .connect(
-      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.xwaiv0u.mongodb.net/${process.env.DB_NAME}`
+      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${
+        process.env.DB_URLDEV || process.env.DB_URL
+      }/${process.env.DB_NAME}`
     )
     .then(() => {
       console.log('Database connection created')

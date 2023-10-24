@@ -72,11 +72,17 @@ export default class AuthCallback {
           ...data,
           password: '',
         })
-
         const token = jwt.sign(
           {
             user: {
-              ...data,
+              uid: payload._id,
+              id: payload.id,
+              avatarUrl: payload.avatarUrl,
+              typeAccount: payload.typeAccount,
+              email: payload.email,
+              name: payload.name,
+              phone: payload.phone,
+              address: payload.address,
             },
           },
           secretKey
@@ -162,4 +168,71 @@ export default class AuthCallback {
       res.status(500).json({ error: err })
     }
   }
+}
+const a = {
+  user: {
+    $__: {
+      activePaths: {
+        paths: {
+          typeAccount: 'require',
+        },
+        states: {
+          require: {
+            typeAccount: true,
+          },
+          default: {},
+          modify: {},
+        },
+      },
+      op: null,
+      saving: null,
+      $versionError: null,
+      saveOptions: null,
+      validating: null,
+      cachedRequired: {},
+      backup: {
+        activePaths: {
+          modify: {
+            email: true,
+            typeAccount: true,
+            id: true,
+            name: true,
+            avatarUrl: true,
+            password: true,
+          },
+          default: {
+            isAdmin: true,
+            gender: true,
+            phone: true,
+            address: true,
+            created: true,
+            birthday: true,
+            _id: true,
+          },
+        },
+        validationError: null,
+      },
+      inserting: true,
+      savedState: {},
+    },
+    _doc: {
+      email: 'ducga0ro1234@gmail.com',
+      typeAccount: 1,
+      isAdmin: true,
+      gender: '',
+      id: '1312341403038732',
+      name: 'Trung Đức',
+      avatarUrl:
+        'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1312341403038732&height=200&width=200&ext=1700619795&hash=AeQ1e81UlNh0h6RQYr0',
+      password: '',
+      phone: '',
+      address: '',
+      created: '2023-10-23T02:22:47.655Z',
+      birthday: '',
+      _id: '6535d91319cc7df01083d88e',
+      __v: 0,
+    },
+    $isNew: false,
+  },
+  iat: 1698027795,
 }

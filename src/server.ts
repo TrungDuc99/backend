@@ -13,6 +13,13 @@ import {
 } from './routes'
 import CartRouter from './routes/Cart'
 const bodyParser = require('body-parser')
+const bcrypt = require('bcrypt')
+import UserSchema, { UserDoc } from './models/User'
+const secretKey: any = process.env.TOKEN_SECRET_KEY
+const redis = require('redis')
+const client = redis.createClient()
+const { faker } = require('@faker-js/faker')
+const otpGenerator = require('otp-generator')
 
 require('dotenv').config()
 
@@ -39,16 +46,27 @@ app.listen(PORT, () => {
   console.log('Server is running at port:', PORT)
 })
 
-const mongoose = require('mongoose')
-
+// const mongoose = require('mongoose')
 // Định nghĩa schema và model cho User
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
-})
 
-// const User = mongoose.model('users', userSchema)
+// export function createRandomUser(): any {
+//   return {
+//     id: faker.string.uuid(),
+//     name: faker.internet.userName(),
+//     email: faker.internet.email(),
+//     avatarUrl: faker.image.avatar(),
+//     password: faker.internet.password(),
+//     birthday: faker.date.birthdate(),
+//     created: faker.date.past(),
+//     typeAccount: 0,
+//     isAdmin: false,
+//   }
+// }
+
+// export const USERS: UserDoc[] = faker.helpers.multiple(createRandomUser, {
+//   count: 5,
+// })
+// const User = mongoose.model('users', UserSchema)
 
 // // Tạo các đối tượng User giả lập
 // const users = [
@@ -56,7 +74,7 @@ const userSchema = new mongoose.Schema({
 //   { name: 'Jane Smith', email: 'janesmith@yahoo.com', password: '987654321' },
 // ]
 // // Thêm dữ liệu giả vào MongoDB
-// User.insertMany(users)
+// User.insertMany(USERS)
 //   .then((docs: any) => {
 //     console.log(docs)
 //   })

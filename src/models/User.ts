@@ -8,7 +8,7 @@ export interface UserDoc extends Document {
   email: string
   name: string
   password: string
-  birthday: Date
+  birthday: string
   avatarUrl: string
   typeAccount: number
   gender: string
@@ -21,7 +21,8 @@ export interface UserDoc extends Document {
 
 const UserSchema = new Schema<UserDoc>({
   email: defaultType.email,
-  typeAccount: defaultType.requireNumber,
+  typeAccount: defaultType.number,
+  isAdmin: defaultType.boolean,
   gender: defaultType.string,
   id: defaultType.string,
   name: defaultType.string,
@@ -31,7 +32,7 @@ const UserSchema = new Schema<UserDoc>({
   address: defaultType.string,
   created: defaultType.date_now,
   updated: defaultType.date,
-  birthday: defaultType.date,
+  birthday: defaultType.string,
 })
 
 export default UserSchema

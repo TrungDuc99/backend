@@ -130,7 +130,16 @@ var AuthCallback = /** @class */ (function () {
                     case 3:
                         payload = _b.sent();
                         token = jwt.sign({
-                            user: __assign({}, data),
+                            user: {
+                                uid: payload._id,
+                                id: payload.id,
+                                avatarUrl: payload.avatarUrl,
+                                typeAccount: payload.typeAccount,
+                                email: payload.email,
+                                name: payload.name,
+                                phone: payload.phone,
+                                address: payload.address,
+                            },
                         }, secretKey);
                         return [2 /*return*/, res.status(200).send({ token: token, newUser: true, data: payload })];
                     case 4: return [3 /*break*/, 6];
@@ -269,3 +278,69 @@ var AuthCallback = /** @class */ (function () {
     return AuthCallback;
 }());
 exports.default = AuthCallback;
+var a = {
+    user: {
+        $__: {
+            activePaths: {
+                paths: {
+                    typeAccount: 'require',
+                },
+                states: {
+                    require: {
+                        typeAccount: true,
+                    },
+                    default: {},
+                    modify: {},
+                },
+            },
+            op: null,
+            saving: null,
+            $versionError: null,
+            saveOptions: null,
+            validating: null,
+            cachedRequired: {},
+            backup: {
+                activePaths: {
+                    modify: {
+                        email: true,
+                        typeAccount: true,
+                        id: true,
+                        name: true,
+                        avatarUrl: true,
+                        password: true,
+                    },
+                    default: {
+                        isAdmin: true,
+                        gender: true,
+                        phone: true,
+                        address: true,
+                        created: true,
+                        birthday: true,
+                        _id: true,
+                    },
+                },
+                validationError: null,
+            },
+            inserting: true,
+            savedState: {},
+        },
+        _doc: {
+            email: 'ducga0ro1234@gmail.com',
+            typeAccount: 1,
+            isAdmin: true,
+            gender: '',
+            id: '1312341403038732',
+            name: 'Trung Đức',
+            avatarUrl: 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1312341403038732&height=200&width=200&ext=1700619795&hash=AeQ1e81UlNh0h6RQYr0',
+            password: '',
+            phone: '',
+            address: '',
+            created: '2023-10-23T02:22:47.655Z',
+            birthday: '',
+            _id: '6535d91319cc7df01083d88e',
+            __v: 0,
+        },
+        $isNew: false,
+    },
+    iat: 1698027795,
+};
