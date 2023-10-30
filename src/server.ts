@@ -12,16 +12,17 @@ import {
   UserRouter,
 } from './routes'
 import CartRouter from './routes/Cart'
-const bodyParser = require('body-parser')
-const bcrypt = require('bcrypt')
 import UserSchema, { UserDoc } from './models/User'
-const secretKey: any = process.env.TOKEN_SECRET_KEY
-const redis = require('redis')
-const client = redis.createClient()
-const { faker } = require('@faker-js/faker')
-const otpGenerator = require('otp-generator')
-
+const bodyParser = require('body-parser')
+const debug = require('debug')('backend:server')
 require('dotenv').config()
+// const redis = require('redis')
+// const bcrypt = require('bcrypt')
+// import UserSchema, { UserDoc } from './models/User'
+// const secretKey: any = process.env.TOKEN_SECRET_KEY
+// const client = redis.createClient()
+const { faker } = require('@faker-js/faker')
+// const otpGenerator = require('otp-generator')
 
 const app = express()
 const PORT = parseInt(<string>process.env.PORT, 10) || 9888
@@ -42,14 +43,58 @@ app.use('/api/posts', PostsRouter)
 app.use('/api/comment', CommentRouter)
 app.use('/api/cart', CartRouter)
 app.use('/api', AuthRouter)
+
 app.listen(PORT, () => {
-  console.log('Server is running at port:', PORT)
+  console.log(`Server is running at port: http://localhost:${PORT}`)
+  debug('Server is up and running on port ', PORT)
+})
+const bcrypt = require('bcrypt')
+
+const mongoose = require('mongoose')
+// // Định nghĩa schema và model cho User
+
+const User = mongoose.model('users', UserSchema)
+
+function hashUser() {
+  return new Promise((resolve) => {
+    const newUser = new User({
+      id: faker.string.uuid(),
+      name: faker.internet.userName(),
+      email: faker.internet.email(),
+      avatarUrl: faker.image.avatar(),
+      birthday: faker.date.birthdate(),
+      password: faker.internet.password(),
+      created: faker.date.past(),
+      typeAccount: 0,
+      isAdmin: false,
+    })
+    console.log('====================================')
+    console.log(newUser.email, '/', newUser.password)
+    console.log('====================================')
+    bcrypt.genSalt(10, (err: any, salt: any) => {
+      bcrypt.hash(newUser.password, salt, (err: any, hash: any) => {
+        if (err) {
+          throw err
+        }
+        newUser.password = hash
+
+        newUser
+          .save()
+          .then((user: any) => {
+            resolve(newUser)
+          })
+          .catch((err: any) => console.log(err))
+
+        resolve(newUser)
+      })
+    })
+  })
+}
+export const USERS: UserDoc[] = faker.helpers.multiple(hashUser, {
+  count: 5,
 })
 
-// const mongoose = require('mongoose')
-// Định nghĩa schema và model cho User
-
-// export function createRandomUser(): any {
+// export function createRandomPosts(): any {
 //   return {
 //     id: faker.string.uuid(),
 //     name: faker.internet.userName(),
@@ -62,11 +107,6 @@ app.listen(PORT, () => {
 //     isAdmin: false,
 //   }
 // }
-
-// export const USERS: UserDoc[] = faker.helpers.multiple(createRandomUser, {
-//   count: 5,
-// })
-// const User = mongoose.model('users', UserSchema)
 
 // // Tạo các đối tượng User giả lập
 // const users = [
@@ -81,6 +121,3 @@ app.listen(PORT, () => {
 //   .catch((err: any) => {
 //     console.error(err)
 //   })
-
-//----- Token Authentication -------
-//Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0NmNjOTZlMDAyYTc0ZGE1NGM1ZGUwOCIsImVtYWlsIjoibmdvY2RpZW5AZ21haWwuY29tIiwibmFtZSI6IkRJ4buCTiBESeG7gE4iLCJwYXNzd29yZCI6IiQyYiQxMCR6WDk5alRFQ3BaUWxRQVh5ZjlqTHB1OUlCYUV5ZHl6MzcvU3FuNUZtL295ci9wTHR4cHBRLiIsInBob25lIjoiMDEyMzQ1Njc4IiwiYWRkcmVzcyI6IjFiLDJjIGhjbSIsIl9fdiI6MH0sImlhdCI6MTY4NDkwMjM4Nn0.L2X2pYdmBpfZR9o6uDrRBehaPjfcw4a_6s_hv20HCvc

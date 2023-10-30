@@ -72,7 +72,7 @@ export default class PostsCallback {
       const data: PostsDoc = req.body
 
       // Kiểm tra xem userId đã được cung cấp hay chưa
-      if (!data.userId || data.userId === '') {
+      if (!data.createBy) {
         // Nếu không, trả về một thông báo lỗi
         return res.status(400).json({ error: 'userId is required' })
       } else {

@@ -164,7 +164,7 @@ var PostsCallback = /** @class */ (function () {
                     case 0:
                         _d.trys.push([0, 4, , 5]);
                         data = req.body;
-                        if (!(!data.userId || data.userId === '')) return [3 /*break*/, 1];
+                        if (!!data.createBy) return [3 /*break*/, 1];
                         // Nếu không, trả về một thông báo lỗi
                         return [2 /*return*/, res.status(400).json({ error: 'userId is required' })];
                     case 1: return [4 /*yield*/, models_1.PostsModel.create(__assign(__assign({}, data), { countLike: (_a = data === null || data === void 0 ? void 0 : data.countLike) !== null && _a !== void 0 ? _a : 0, countComment: (_b = data === null || data === void 0 ? void 0 : data.countComment) !== null && _b !== void 0 ? _b : 0, countView: (_c = data === null || data === void 0 ? void 0 : data.countView) !== null && _c !== void 0 ? _c : 0 }))];

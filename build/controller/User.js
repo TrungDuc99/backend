@@ -75,18 +75,12 @@ var UserCallback = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 4, , 5]);
-                        console.log('vào nè');
                         token = (_b = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')) === null || _b === void 0 ? void 0 : _b[1];
-                        console.log({ token: token });
                         if (!token) return [3 /*break*/, 2];
                         data = jsonwebtoken_1.default.decode(token);
-                        console.log({ data: data });
                         return [4 /*yield*/, models_1.UserModel.findOne({ _id: data.user.uid }).select('email _id name phone address created avatarUrl')];
                     case 1:
                         payload = _c.sent();
-                        console.log('====================================');
-                        console.log({ payload: payload });
-                        console.log('====================================');
                         return [2 /*return*/, res.json({ success: true, data: payload })];
                     case 2:
                         res.status(403).json({ error: 'Không tìm thấy token ' });

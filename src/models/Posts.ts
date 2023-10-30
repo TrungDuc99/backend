@@ -5,7 +5,11 @@ require('dotenv').config()
 
 export interface PostsDoc extends Document {
   content: string
-  userId: string
+  createBy: {
+    userId: string
+    name: string
+    avatar: string
+  }
   title: string
   image: any[]
   topic: string
@@ -20,7 +24,12 @@ export interface PostsDoc extends Document {
 const PostSchema = new Schema<PostsDoc>({
   content: defaultType.string,
   description: defaultType.string,
-  userId: { ...defaultType.string, required: true },
+  createBy: {
+    userId: defaultType.requiredString,
+
+    name: defaultType.string,
+    avatar: defaultType.string,
+  },
   title: defaultType.string,
   image: [],
   countLike: defaultType.number,

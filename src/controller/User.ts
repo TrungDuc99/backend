@@ -21,21 +21,15 @@ export default class UserCallback {
   }
   static async getInfo(req: Request, res: Response) {
     try {
-      console.log('vào nè')
-
       const token = req.headers.authorization?.split(' ')?.[1]
-      console.log({ token })
 
       if (token) {
         const data: any = jwt.decode(token)
-        console.log({ data })
 
         const payload = await UserModel.findOne({ _id: data.user.uid }).select(
           'email _id name phone address created avatarUrl'
         )
-        console.log('====================================')
-        console.log({ payload })
-        console.log('====================================')
+
         return res.json({ success: true, data: payload })
       } else {
         res.status(403).json({ error: 'Không tìm thấy token ' })
