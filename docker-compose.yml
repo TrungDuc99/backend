@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  api_unidental:
+    container_name: "api_unidental"
+    image: "node:latest"
+    user: "root"
+    restart: always
+    ports:
+      - 3001:3001
+    working_dir: /home/node/app
+    volumes:
+      - ./:/home/node/app
+    env_file:
+      - .env
+    command: bash -c "yarn install --legacy-peer-deps && yarn run build && yarn run start"
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
